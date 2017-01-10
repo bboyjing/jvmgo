@@ -83,3 +83,13 @@ func (self *ClassFile) readInterface(reader *ClassReader) {
 	//接口是u2类型的表结构，所以用的readUint16s方法读取
 	self.interfaces = reader.readUint16s()
 }
+
+// 读取字段表
+func (self *ClassFile) readFields(reader *ClassReader) {
+	readMembers(reader, self.constantPool)
+}
+
+// 读取方法表
+func (self *ClassFile) readMethods(reader *ClassReader) {
+	readMembers(reader, self.constantPool)
+}
