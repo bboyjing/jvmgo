@@ -7,7 +7,6 @@ import (
 	"strings"
 )
 
-
 func main() {
 	command := cmd.ParseCmd()
 	if command.VersionFlag {
