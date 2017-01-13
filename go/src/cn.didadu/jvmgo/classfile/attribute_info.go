@@ -7,6 +7,8 @@ attribute_info {
     u1 info[attribute_length];
 }
 */
+
 type AttributeInfo interface {
+	// 读取属性信息由具体的属性结构实现
 	readInfo(reader *ClassReader)
 }
