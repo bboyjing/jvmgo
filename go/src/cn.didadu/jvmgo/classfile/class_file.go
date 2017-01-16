@@ -1,5 +1,7 @@
 package classfile
 
+import "fmt"
+
 /*
 ClassFile {
     u4             magic;
@@ -33,6 +35,48 @@ type ClassFile struct {
 	fields       []*MemberInfo
 	methods      []*MemberInfo
 	attributes   []AttributeInfo
+}
+
+// 将从byte数组中读取ClassFile
+func Parse(classData []byte) (cf *ClassFile, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(error)
+			if !ok {
+				err = fmt.Errorf("%v", r)
+			}
+		}
+	}()
+
+	cr := &ClassReader{classData}
+	cf = &ClassFile{}
+	cf.read(cr)
+	return
+}
+
+// 读取ClassFile
+func (self *ClassFile) read(reader *ClassReader) {
+	// 读取魔数
+	self.readAndCheckMagic(reader)
+	// 读取版本号
+	self.readAndCheckVersion(reader)
+	// 读取常量池
+	self.constantPool = readConstantPool(reader)
+	// 读取类访问标志
+	self.readAccessFlags(reader)
+	// 读取类索引
+	self.readThisClass(reader)
+	// 读取超类索引
+	self.readSuperClass(reader);
+	// 读取接口索引表
+	self.readInterface(reader)
+	// 读取字段表
+	self.readFields(reader)
+	// 读取方法表
+	self.readMethods(reader)
+	// 读取属性
+	self.attributes = readAttributes(reader, self.constantPool)
 }
 
 // 读取魔数
@@ -86,10 +130,49 @@ func (self *ClassFile) readInterface(reader *ClassReader) {
 
 // 读取字段表
 func (self *ClassFile) readFields(reader *ClassReader) {
-	readMembers(reader, self.constantPool)
+	self.fields = readMembers(reader, self.constantPool)
 }
 
 // 读取方法表
 func (self *ClassFile) readMethods(reader *ClassReader) {
-	readMembers(reader, self.constantPool)
+	self.methods = readMembers(reader, self.constantPool)
+}
+
+/*
+	读取ClassFile结构体中的各项，类似Java的Get方法
+ */
+func (self *ClassFile) MinorVersion() uint16 {
+	return self.minorVersion
+}
+func (self *ClassFile) MajorVersion() uint16 {
+	return self.majorVersion
+}
+func (self *ClassFile) ConstantPool() ConstantPool {
+	return self.constantPool
+}
+func (self *ClassFile) AccessFlags() uint16 {
+	return self.accessFlags
+}
+func (self *ClassFile) Fields() []*MemberInfo {
+	return self.fields
+}
+func (self *ClassFile) Methods() []*MemberInfo {
+	return self.methods
+}
+
+func (self *ClassFile) ClassName() string {
+	return self.constantPool.getClassName(self.thisClass)
+}
+func (self *ClassFile) SuperClassName() string {
+	if self.superClass > 0 {
+		return self.constantPool.getClassName(self.superClass)
+	}
+	return ""
+}
+func (self *ClassFile) InterfaceNames() []string {
+	interfaceNames := make([]string, len(self.interfaces))
+	for i, cpIndex := range self.interfaces {
+		interfaceNames[i] = self.constantPool.getClassName(cpIndex)
+	}
+	return interfaceNames
 }
