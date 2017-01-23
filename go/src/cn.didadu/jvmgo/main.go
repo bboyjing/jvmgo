@@ -4,8 +4,9 @@ import (
 	"cn.didadu/jvmgo/cmd"
 	"fmt"
 	"cn.didadu/jvmgo/classpath"
-	"strings"
+	//"strings"
 	"cn.didadu/jvmgo/classfile"
+	"cn.didadu/jvmgo/rtdata"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 
 // 模拟启动JVM
 func startJVM(cmd *cmd.Cmd) {
-	// 获取Classpath
+	/*// 获取Classpath
 	cp := classpath.Parse(cmd.XjreOption, cmd.CpOption)
 	fmt.Printf("classpath:%v class:%v args:%v\n",
 		cp, cmd.Class, cmd.Args)
@@ -31,7 +32,12 @@ func startJVM(cmd *cmd.Cmd) {
 	// 读取class
 	cf := loadClass(className, cp)
 	fmt.Println(cmd.Class)
-	printClassInfo(cf)
+	printClassInfo(cf)*/
+
+
+	frame := rtdata.NewFrame(100, 100)
+	testLocalVars(frame.LocalVars())
+	testOperandStack(frame.OperandStack())
 }
 
 func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
@@ -65,4 +71,40 @@ func printClassInfo(cf *classfile.ClassFile) {
 	for _, m := range cf.Methods() {
 		fmt.Printf("  %s\n", m.Name())
 	}
+}
+
+// 测试局部变量表
+func testLocalVars(vars rtdata.LocalVars) {
+	vars.SetInt(0, 100)
+	vars.SetInt(1, -100)
+	vars.SetLong(2, 2997924580)
+	vars.SetLong(4, -2997924580)
+	vars.SetFloat(6, 3.1415926)
+	vars.SetDouble(7, 2.71828182845)
+	vars.SetRef(9, nil)
+	println(vars.GetInt(0))
+	println(vars.GetInt(1))
+	println(vars.GetLong(2))
+	println(vars.GetLong(4))
+	println(vars.GetFloat(6))
+	println(vars.GetDouble(7))
+	println(vars.GetRef(9))
+}
+
+// 测试操作数栈
+func testOperandStack(ops *rtdata.OperandStack) {
+	ops.PushInt(100)
+	ops.PushInt(-100)
+	ops.PushLong(2997924580)
+	ops.PushLong(-2997924580)
+	ops.PushFloat(3.1415926)
+	ops.PushDouble(2.71828182845)
+	ops.PushRef(nil)
+	println(ops.PopRef())
+	println(ops.PopDouble())
+	println(ops.PopFloat())
+	println(ops.PopLong())
+	println(ops.PopLong())
+	println(ops.PopInt())
+	println(ops.PopInt())
 }
