@@ -10,14 +10,18 @@ import (
 )
 
 func main() {
-	command := cmd.ParseCmd()
+/*	command := cmd.ParseCmd()
 	if command.VersionFlag {
 		fmt.Println("version 0.0.1")
 	} else if command.HelpFlag || command.Class == "" {
 		cmd.PrintUsage()
 	} else {
 		startJVM(command)
-	}
+	}*/
+
+	fmt.Println(uint32(6))
+	fmt.Println(uint32(18) & 0x1f)
+
 }
 
 // 模拟启动JVM
