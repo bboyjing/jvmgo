@@ -7,21 +7,19 @@ import (
 	//"strings"
 	"cn.didadu/jvmgo/classfile"
 	"cn.didadu/jvmgo/rtdata"
+	"strings"
+	"cn.didadu/jvmgo/instructions"
 )
 
 func main() {
-/*	command := cmd.ParseCmd()
+	command := cmd.ParseCmd()
 	if command.VersionFlag {
 		fmt.Println("version 0.0.1")
 	} else if command.HelpFlag || command.Class == "" {
 		cmd.PrintUsage()
 	} else {
 		startJVM(command)
-	}*/
-
-	fmt.Println(uint32(6))
-	fmt.Println(uint32(18) & 0x1f)
-
+	}
 }
 
 // 模拟启动JVM
@@ -39,9 +37,32 @@ func startJVM(cmd *cmd.Cmd) {
 	printClassInfo(cf)*/
 
 
-	frame := rtdata.NewFrame(100, 100)
+	/*frame := rtdata.NewFrame(100, 100)
 	testLocalVars(frame.LocalVars())
-	testOperandStack(frame.OperandStack())
+	testOperandStack(frame.OperandStack())*/
+
+	// 获取Classpath
+	cp := classpath.Parse(cmd.XjreOption, cmd.CpOption)
+	// 将.替换成/(java.lang.String -> java/lang/String)
+	className := strings.Replace(cmd.Class, ".", "/", -1)
+	// 加载类
+	cf := loadClass(className, cp)
+	mainMethod := getMainMethod(cf)
+	if mainMethod != nil {
+		instructions.Interpret(mainMethod)
+	} else {
+		fmt.Printf("Main method not found in class %s\n", cmd.Class)
+	}
+}
+
+// 获取main()方法
+func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range cf.Methods() {
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
 }
 
 func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {

@@ -47,3 +47,8 @@ func (self *Thread) PopFrame() *Frame {
 func (self *Thread) CurrentFrame() *Frame {
 	return self.stack.top()
 }
+
+// 为线程创建新的栈帧
+func (self *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
+	return newFrame(self, maxLocals, maxStack)
+}
