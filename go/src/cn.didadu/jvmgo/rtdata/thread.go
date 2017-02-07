@@ -12,7 +12,7 @@ JVM
 
 // Thread结构体
 type Thread struct {
-	// pc寄存器
+	// pc寄存器，存放当前正在执行的Java虚拟机指令的地址
 	pc    int
 	// 虚拟机栈结构体指针
 	stack *Stack

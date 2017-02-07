@@ -16,7 +16,7 @@ public class ClassFile2 {
 
     public static void main(String[] args) throws RuntimeException {
         /**
-         * 测试局部变量在字节码中出现的位置
+         * 测试局部变量在class文件中出现的位置
          */
         String localStr1 = "Hello,";
         String localStr2 = "World";
