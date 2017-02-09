@@ -1,6 +1,7 @@
 package rtdata
 
 import "math"
+import "cn.didadu/jvmgo/rtdata/heap"
 
 type OperandStack struct {
 	// 记录栈顶位置
@@ -71,11 +72,11 @@ func (self *OperandStack) PopDouble() float64 {
 }
 
 // 弹出、推入ref
-func (self *OperandStack) PushRef(ref *Object) {
+func (self *OperandStack) PushRef(ref *heap.Object) {
 	self.slots[self.size].ref = ref
 	self.size++
 }
-func (self *OperandStack) PopRef() *Object {
+func (self *OperandStack) PopRef() *heap.Object {
 	self.size--
 	ref := self.slots[self.size].ref
 	self.slots[self.size].ref = nil

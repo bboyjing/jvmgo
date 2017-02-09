@@ -41,7 +41,7 @@ func (self ConstantPool)getUtf8(index uint16) string {
 	return utf8Info.str
 }
 
-// 读取索引读取ClassName
+// 通过索引读取ClassName
 func (self ConstantPool) getClassName(index uint16) string {
 	// 通过索引读取CONSTANT_Class_info
 	classInfo := self.getConstantInfo(index).(*ConstantClassInfo)

@@ -1,6 +1,7 @@
 package rtdata
 
 import "math"
+import "cn.didadu/jvmgo/rtdata/heap"
 
 // 局部变量表结构体
 type LocalVars []Slot
@@ -63,9 +64,9 @@ func (self LocalVars) GetDouble(index uint) float64 {
 }
 
 // 设置、读取引用
-func (self LocalVars) SetRef(index uint, ref *Object) {
+func (self LocalVars) SetRef(index uint, ref *heap.Object) {
 	self[index].ref = ref
 }
-func (self LocalVars) GetRef(index uint) *Object {
+func (self LocalVars) GetRef(index uint) *heap.Object {
 	return self[index].ref
 }
