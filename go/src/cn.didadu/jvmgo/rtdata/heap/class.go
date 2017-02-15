@@ -1,6 +1,9 @@
 package heap
 
-import "cn.didadu/jvmgo/classfile"
+import (
+	"cn.didadu/jvmgo/classfile"
+	"strings"
+)
 
 type Class struct {
 	accessFlags       uint16
@@ -55,4 +58,38 @@ func (self *Class) IsAnnotation() bool {
 }
 func (self *Class) IsEnum() bool {
 	return 0 != self.accessFlags&ACC_ENUM
+}
+
+// self class是否能被other class访问
+func (self *Class) isAccessibleTo(other *Class) bool {
+	/*
+		若self class访问标识为public或者两个类在同一个包下，则可以访问
+		暂时简单地按照包名来检查类是否属于同一个包
+	 */
+	return self.IsPublic() ||
+		self.getPackageName() == other.getPackageName()
+}
+
+// 获取包名
+func (self *Class) getPackageName() string {
+	if i := strings.LastIndex(self.name, "/"); i >= 0 {
+		return self.name[:i]
+	}
+	return ""
+}
+
+// 判断self class是否时other class的子类
+func (self *Class) isSubClassOf(other *Class) bool {
+	return self.superClassName == other.name
+}
+
+// Getter方法
+func (self *Class) ConstantPool() *ConstantPool {
+	return self.constantPool
+}
+
+// 创建对象引用
+func (self *Class) NewObject() *Object {
+	// 调用Object结构体
+	return newObject(self)
 }

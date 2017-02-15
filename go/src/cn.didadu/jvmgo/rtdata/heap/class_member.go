@@ -51,3 +51,24 @@ func (self *ClassMember) Descriptor() string {
 func (self *ClassMember) Class() *Class {
 	return self.class
 }
+
+// 判断self字段是否能被d class访问
+func (self *ClassMember) isAccessibleTo(d *Class) bool {
+	// 如果self字段是public，则任何类都可以访问
+	if self.IsPublic() {
+		return true
+	}
+	// 获取self字段所属的class
+	c := self.class
+	// 如果self字段是protected，只有子类和同一包下的类可以访问
+	if self.IsProtected() {
+		return d == c || d.isSubClassOf(c) ||
+			c.getPackageName() == d.getPackageName()
+	}
+	// 如果是默认访问权限，则只有同一包下的类可以访问
+	if !self.IsPrivate() {
+		return c.getPackageName() == d.getPackageName()
+	}
+	// self字段是private，则只有本类才可以访问
+	return d == c
+}

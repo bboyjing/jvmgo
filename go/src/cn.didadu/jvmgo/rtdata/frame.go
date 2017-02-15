@@ -1,5 +1,7 @@
 package rtdata
 
+import "cn.didadu/jvmgo/rtdata/heap"
+
 type Frame struct {
 	// 实现链表数据结构
 	lower        *Frame
@@ -11,6 +13,8 @@ type Frame struct {
 	thread       *Thread
 	// 下个pc寄存器地址(为了实现跳转)
 	nextPC       int
+	// 方法区的方法信息指针
+	method       *heap.Method
 }
 
 // 实例化栈帧
@@ -30,6 +34,17 @@ func newFrame(thread *Thread, maxLocals, maxStack uint) *Frame {
 	}
 }
 
+// 实例化栈帧
+func newFrame(thread *Thread, method *heap.Method) *Frame {
+	return &Frame{
+		thread:       thread,
+		method:       method,
+		localVars:    newLocalVars(method.MaxLocals()),
+		operandStack: newOperandStack(method.MaxStack()),
+	}
+}
+
+
 // localVars和operandStackGet方法
 func (self *Frame) LocalVars() LocalVars {
 	return self.localVars
@@ -46,4 +61,7 @@ func (self *Frame) NextPC() int {
 }
 func (self *Frame) SetNextPC(nextPC int) {
 	self.nextPC = nextPC
+}
+func (self *Frame) Method() *heap.Method {
+	return self.method
 }
