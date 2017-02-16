@@ -26,15 +26,6 @@ func NewFrame(maxLocals, maxStack uint) *Frame {
 }
 
 // 实例化栈帧
-func newFrame(thread *Thread, maxLocals, maxStack uint) *Frame {
-	return &Frame{
-		thread:       thread,
-		localVars:    newLocalVars(maxLocals),
-		operandStack: newOperandStack(maxStack),
-	}
-}
-
-// 实例化栈帧
 func newFrame(thread *Thread, method *heap.Method) *Frame {
 	return &Frame{
 		thread:       thread,
@@ -43,7 +34,6 @@ func newFrame(thread *Thread, method *heap.Method) *Frame {
 		operandStack: newOperandStack(method.MaxStack()),
 	}
 }
-
 
 // localVars和operandStackGet方法
 func (self *Frame) LocalVars() LocalVars {

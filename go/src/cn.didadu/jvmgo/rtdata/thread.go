@@ -1,5 +1,7 @@
 package rtdata
 
+import "cn.didadu/jvmgo/rtdata/heap"
+
 /*
 JVM
   Thread
@@ -49,6 +51,6 @@ func (self *Thread) CurrentFrame() *Frame {
 }
 
 // 为线程创建新的栈帧
-func (self *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
-	return newFrame(self, maxLocals, maxStack)
+func (self *Thread) NewFrame(method *heap.Method) *Frame {
+	return newFrame(self, method)
 }

@@ -21,3 +21,7 @@ func (self *Object) Class() *Class {
 func (self *Object) Fields() Slots {
 	return self.fields
 }
+
+func (self *Object) IsInstanceOf(class *Class) bool {
+	return class.isAssignableFrom(self.class)
+}

@@ -78,14 +78,12 @@ func (self *Class) getPackageName() string {
 	return ""
 }
 
-// 判断self class是否时other class的子类
-func (self *Class) isSubClassOf(other *Class) bool {
-	return self.superClassName == other.name
-}
-
 // Getter方法
 func (self *Class) ConstantPool() *ConstantPool {
 	return self.constantPool
+}
+func (self *Class) StaticVars() Slots {
+	return self.staticVars
 }
 
 // 创建对象引用
