@@ -91,3 +91,21 @@ func (self *Class) NewObject() *Object {
 	// 调用Object结构体
 	return newObject(self)
 }
+
+// 获取main()方法
+func (self *Class) GetMainMethod() *Method {
+	return self.getStaticMethod("main", "([Ljava/lang/String;)V")
+}
+
+// 通过方法名和描述符获取静态方法
+func (self *Class) getStaticMethod(name, descriptor string) *Method {
+	// 遍历运行时常量池中的方法信息
+	for _, method := range self.methods {
+		if method.IsStatic() &&
+			method.name == name &&
+			method.descriptor == descriptor {
+			return method
+		}
+	}
+	return nil
+}

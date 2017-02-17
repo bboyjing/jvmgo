@@ -9,6 +9,7 @@ import (
 	"cn.didadu/jvmgo/rtdata"
 	"strings"
 	"cn.didadu/jvmgo/instructions"
+	"cn.didadu/jvmgo/rtdata/heap"
 )
 
 func main() {
@@ -42,13 +43,30 @@ func startJVM(cmd *cmd.Cmd) {
 	testOperandStack(frame.OperandStack())*/
 
 	// 获取Classpath
-	cp := classpath.Parse(cmd.XjreOption, cmd.CpOption)
+	/*cp := classpath.Parse(cmd.XjreOption, cmd.CpOption)
 	// 将.替换成/(java.lang.String -> java/lang/String)
 	className := strings.Replace(cmd.Class, ".", "/", -1)
 	// 加载类
 	cf := loadClass(className, cp)
 	mainMethod := getMainMethod(cf)
 	if mainMethod != nil {
+		instructions.Interpret(mainMethod)
+	} else {
+		fmt.Printf("Main method not found in class %s\n", cmd.Class)
+	}*/
+
+	// 获取Classpath
+	cp := classpath.Parse(cmd.XjreOption, cmd.CpOption)
+	// 创ClassLoader实例
+	classloader := heap.NewClassLoader(cp)
+
+	// class权限定名，将.替换成/(java.lang.String -> java/lang/String)
+	className := strings.Replace(cmd.Class, ".", "/", -1)
+	// 加载主类
+	mainClass := classloader.LoadClass(className);
+	// 获取主类的main()方法
+	mainMethod := mainClass.GetMainMethod()
+	if mainClass != nil {
 		instructions.Interpret(mainMethod)
 	} else {
 		fmt.Printf("Main method not found in class %s\n", cmd.Class)

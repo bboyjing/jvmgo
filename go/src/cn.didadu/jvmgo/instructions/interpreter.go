@@ -1,39 +1,30 @@
 package instructions
 
 import (
-	"cn.didadu/jvmgo/classfile"
 	"cn.didadu/jvmgo/rtdata"
 	"fmt"
 	"cn.didadu/jvmgo/instructions/base"
+	"cn.didadu/jvmgo/rtdata/heap"
 )
 
-// 获取method_info的code属性
-func Interpret(methodInfo *classfile.MemberInfo) {
-	// 获取单个方法的Code属性
-	codeAttr := methodInfo.CodeAttribute();
-	// 获取局部变量表大小
-	maxLocals := codeAttr.MaxLocals()
-	// 获取操作数栈的最大深度
-	maxStack := codeAttr.MaxStack()
-	// 获取方法的字节码
-	bytecode := codeAttr.Code()
-
+// 传入入口方法，初始化线程
+func Interpret(method *heap.Method) {
 	// 创建一个Thread实例
 	thread := rtdata.NewThread()
 	// 创建栈帧
-	frame := thread.NewFrame(maxLocals, maxStack);
+	frame := thread.NewFrame(method)
 	// 栈帧推入虚拟栈
 	thread.PushFrame(frame)
 
 	defer catchErr(frame)
-	loop(thread, bytecode)
+	loop(thread, method.Code())
 }
 
 func catchErr(frame *rtdata.Frame) {
 	if r := recover(); r != nil {
-		fmt.Printf("LocalVars:%v\n", frame.LocalVars())
+		/*fmt.Printf("LocalVars:%v\n", frame.LocalVars())
 		fmt.Printf("OperandStack:%v\n", frame.OperandStack())
-		panic(r)
+		panic(r)*/
 	}
 }
 
