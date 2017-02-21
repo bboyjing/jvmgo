@@ -11,6 +11,8 @@ type Method struct {
 	maxLocals uint
 	// 字节码
 	code      []byte
+	// 方法的参数所占的Slot数量
+	argSlotCount uint
 }
 
 // 初始化方法信息
@@ -21,6 +23,7 @@ func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
 		methods[i].class = class
 		methods[i].copyMemberInfo(cfMethod)
 		methods[i].copyAttributes(cfMethod)
+		methods[i].calcArgSlotCount()
 	}
 	return methods
 }
@@ -43,4 +46,21 @@ func (self *Method) MaxLocals() uint {
 }
 func (self *Method) Code() []byte {
 	return self.code
+}
+
+// 计算方法参数占用的slot数量
+func (self *Method) calcArgSlotCount() {
+	// 分解方法描述符
+	parsedDescriptor := parseMethodDescriptor(self.descriptor)
+	for _, paramType := range parsedDescriptor.parameterTypes {
+		self.argSlotCount++
+		// long和double占两个slot
+		if paramType == "J" || paramType == "D" {
+			self.argSlotCount++
+		}
+	}
+	if !self.IsStatic() {
+		// 如果不是静态方法，给隐藏的参数this添加一个slot位置
+		self.argSlotCount++
+	}
 }
