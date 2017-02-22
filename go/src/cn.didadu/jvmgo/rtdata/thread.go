@@ -54,3 +54,13 @@ func (self *Thread) CurrentFrame() *Frame {
 func (self *Thread) NewFrame(method *heap.Method) *Frame {
 	return newFrame(self, method)
 }
+
+// 获取栈顶指针
+func (self *Thread) TopFrame() *Frame {
+	return self.stack.top()
+}
+
+// 判断虚拟机栈是否为空
+func (self *Thread) IsStackEmpty() bool {
+	return self.stack.isEmpty()
+}

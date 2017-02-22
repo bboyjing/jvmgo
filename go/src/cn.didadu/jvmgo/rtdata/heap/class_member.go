@@ -62,12 +62,12 @@ func (self *ClassMember) isAccessibleTo(d *Class) bool {
 	c := self.class
 	// 如果self字段是protected，只有子类和同一包下的类可以访问
 	if self.IsProtected() {
-		return d == c || d.isSubClassOf(c) ||
-			c.getPackageName() == d.getPackageName()
+		return d == c || d.IsSubClassOf(c) ||
+			c.GetPackageName() == d.GetPackageName()
 	}
 	// 如果是默认访问权限，则只有同一包下的类可以访问
 	if !self.IsPrivate() {
-		return c.getPackageName() == d.getPackageName()
+		return c.GetPackageName() == d.GetPackageName()
 	}
 	// self字段是private，则只有本类才可以访问
 	return d == c

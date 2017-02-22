@@ -54,3 +54,8 @@ func (self *Stack) pop() *Frame {
 	self.size--
 	return top;
 }
+
+// 判断栈顶指针是否为空
+func (self *Stack) isEmpty() bool {
+	return self._top == nil
+}

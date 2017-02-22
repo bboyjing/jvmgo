@@ -17,6 +17,13 @@ func (self *NEW) Execute(frame *rtdata.Frame) {
 	// 解析类
 	class := classRef.ResolvedClass()
 
+	// 判断类初始化是否已经开始
+	if !class.InitStarted() {
+		frame.RevertNextPC()
+		base.InitClass(frame.Thread(), class)
+		return
+	}
+
 	// 接口和抽象类不能实例化，抛出InstantiationError异常
 	if class.IsInterface() || class.IsAbstract() {
 		panic("java.lang.InstantiationError")

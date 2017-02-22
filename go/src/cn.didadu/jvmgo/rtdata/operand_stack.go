@@ -92,3 +92,8 @@ func (self *OperandStack) PopSlot() Slot {
 	self.size--
 	return self.slots[self.size]
 }
+
+// 获取距离操作数栈顶n个slot的引用变量
+func (self *OperandStack) GetRefFromTop(n uint) *heap.Object {
+	return self.slots[self.size-1-n].ref
+}

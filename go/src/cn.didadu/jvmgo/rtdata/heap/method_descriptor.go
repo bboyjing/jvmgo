@@ -9,12 +9,6 @@ type MethodDescriptorParser struct {
 	parsed *MethodDescriptor
 }
 
-type MethodDescriptorParser struct {
-	raw    string
-	offset int
-	parsed *MethodDescriptor
-}
-
 func parseMethodDescriptor(descriptor string) *MethodDescriptor {
 	parser := &MethodDescriptorParser{}
 	return parser.parse(descriptor)

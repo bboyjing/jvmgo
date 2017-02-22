@@ -22,6 +22,13 @@ func (self *PUT_STATIC) Execute(frame *rtdata.Frame) {
 	field := fieldRef.ResolvedField()
 	class := field.Class()
 
+	// 判断类初始化是否已经开始
+	if !class.InitStarted() {
+		frame.RevertNextPC()
+		base.InitClass(frame.Thread(), class)
+		return
+	}
+
 	// 判断字段是否是static
 	if !field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")

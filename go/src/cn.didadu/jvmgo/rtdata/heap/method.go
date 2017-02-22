@@ -64,3 +64,16 @@ func (self *Method) calcArgSlotCount() {
 		self.argSlotCount++
 	}
 }
+
+// 获取方法的参数所占的Slot数量
+func (self *Method) ArgSlotCount() uint {
+	return self.argSlotCount
+}
+
+func (self *Method) IsAbstract() bool {
+	return 0 != self.accessFlags&ACC_ABSTRACT
+}
+
+func (self *Method) IsNative() bool {
+	return 0 != self.accessFlags&ACC_NATIVE
+}

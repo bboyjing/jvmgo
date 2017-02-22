@@ -46,12 +46,21 @@ func (self *Frame) OperandStack() *OperandStack {
 func (self *Frame) Thread() *Thread {
 	return self.thread
 }
+
 func (self *Frame) NextPC() int {
 	return self.nextPC
 }
+
 func (self *Frame) SetNextPC(nextPC int) {
 	self.nextPC = nextPC
 }
+
 func (self *Frame) Method() *heap.Method {
 	return self.method
+}
+
+// 重置nextPC
+func (self *Frame) RevertNextPC() {
+	// 因为Thread的pc寄存器字段始终指向当前指令地址
+	self.nextPC = self.thread.pc
 }

@@ -18,6 +18,13 @@ func (self *GET_STATIC) Execute(frame *rtdata.Frame) {
 	field := fieldRef.ResolvedField()
 	class := field.Class()
 
+	// 判断类初始化是否已经开始
+	if !class.InitStarted() {
+		frame.RevertNextPC()
+		base.InitClass(frame.Thread(), class)
+		return
+	}
+
 	// 判断是否是静态方法
 	if !field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")

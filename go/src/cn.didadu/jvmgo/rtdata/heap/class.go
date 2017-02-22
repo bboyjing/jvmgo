@@ -19,6 +19,8 @@ type Class struct {
 	instanceSlotCount uint
 	staticSlotCount   uint
 	staticVars        Slots
+	// 表示类的<clinit>方法是否已经开始执行
+	initStarted       bool
 }
 
 // 将ClassFile结构体转换成Class结构体
@@ -67,11 +69,11 @@ func (self *Class) isAccessibleTo(other *Class) bool {
 		暂时简单地按照包名来检查类是否属于同一个包
 	 */
 	return self.IsPublic() ||
-		self.getPackageName() == other.getPackageName()
+		self.GetPackageName() == other.GetPackageName()
 }
 
 // 获取包名
-func (self *Class) getPackageName() string {
+func (self *Class) GetPackageName() string {
 	if i := strings.LastIndex(self.name, "/"); i >= 0 {
 		return self.name[:i]
 	}
@@ -84,6 +86,9 @@ func (self *Class) ConstantPool() *ConstantPool {
 }
 func (self *Class) StaticVars() Slots {
 	return self.staticVars
+}
+func (self *Class) Name() string {
+	return self.name
 }
 
 // 创建对象引用
@@ -108,4 +113,20 @@ func (self *Class) getStaticMethod(name, descriptor string) *Method {
 		}
 	}
 	return nil
+}
+
+func (self *Class) SuperClass() *Class {
+	return self.superClass
+}
+
+func (self *Class) InitStarted() bool {
+	return self.initStarted
+}
+
+func (self *Class) StartInit() {
+	self.initStarted = true
+}
+
+func (self *Class) GetClinitMethod() *Method {
+	return self.getStaticMethod("<clinit>", "()V")
 }
