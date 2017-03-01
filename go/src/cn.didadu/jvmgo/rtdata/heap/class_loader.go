@@ -31,8 +31,43 @@ func (self *ClassLoader) LoadClass(name string) *Class {
 		// 已加载直接返回
 		return class
 	}
+
+	// 若类名的第一个字符是'['，表示该类是数组类
+	if name[0] == '[' {
+		return self.loadArrayClass(name)
+	}
+
 	// 加载类
 	return self.loadNonArrayClass(name)
+}
+
+// 加载数组类
+func (self *ClassLoader) loadArrayClass(name string) *Class {
+	/*
+		生成Class结构体，数组类由Java虚拟机在运行时生成
+		所以没有像loadNonArrayClass()那样读取class文件
+	 */
+	class := &Class{
+		// 访问标识
+		accessFlags: ACC_PUBLIC, // todo
+		// 类名
+		name:        name,
+		// 类加载器
+		loader:      self,
+		// 数组类不需要初始化，所以设成true
+		initStarted: true,
+		// 数组类的超类是java/lang/Object
+		superClass:  self.LoadClass("java/lang/Object"),
+		interfaces: []*Class{
+			// 数组类实现了java.lang.Cloneable接口
+			self.LoadClass("java/lang/Cloneable"),
+			// 数组类实现了java.io.Serializable
+			self.LoadClass("java/io/Serializable"),
+		},
+	}
+	// 记录该数组类已加载
+	self.classMap[name] = class
+	return class
 }
 
 /*

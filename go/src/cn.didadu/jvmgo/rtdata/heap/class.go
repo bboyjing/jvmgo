@@ -130,3 +130,14 @@ func (self *Class) StartInit() {
 func (self *Class) GetClinitMethod() *Method {
 	return self.getStaticMethod("<clinit>", "()V")
 }
+
+func (self *Class) Loader() *ClassLoader {
+	return self.loader
+}
+
+func (self *Class) ArrayClass() *Class {
+	// 获取数组类名
+	arrayClassName := getArrayClassName(self.name)
+	// 通过数组类名加载该数组类
+	return self.loader.LoadClass(arrayClassName)
+}

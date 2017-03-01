@@ -12,6 +12,7 @@ public class ClassFile {
     public static final long LONG = 12345678901L;
     public static final float PI = 3.14f;
     public static double E = 2.71828;
+    public static final String[] stringArray = new String[]{"1"};
 
     public ClassFile (){
 
