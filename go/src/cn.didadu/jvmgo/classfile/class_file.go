@@ -24,7 +24,7 @@ ClassFile {
 */
 
 type ClassFile struct {
-	magic      uint32
+	magic        uint32
 	minorVersion uint16
 	majorVersion uint16
 	constantPool ConstantPool
@@ -80,7 +80,7 @@ func (self *ClassFile) read(reader *ClassReader) {
 }
 
 // 读取魔数
-func (self *ClassFile) readAndCheckMagic(reader *ClassReader)  {
+func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {
 	magic := reader.readUint32()
 	if magic != 0xCAFEBABE {
 		/*

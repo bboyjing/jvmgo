@@ -8,9 +8,9 @@ import (
 
 type ClassLoader struct {
 	// 通过Classpath来搜索和读取class文件
-	cp       *classpath.Classpath
+	cp          *classpath.Classpath
 	// 记录已经加载的类数据，key是类完全限定名
-	classMap map[string]*Class
+	classMap    map[string]*Class
 	// 是否把类加载信息输出到控制台
 	verboseFlag bool
 }
@@ -252,9 +252,13 @@ func initStaticFinalVar(class *Class, field *Field) {
 		case "D":
 			val := cp.GetConstant(cpIndex).(float64)
 			vars.SetDouble(slotId, val)
-		// String类型暂时没有实现
+		// String类型
 		case "Ljava/lang/String;":
-			panic("todo")
+			// 获取常量池中存储的Go自复查un
+			goStr := cp.GetConstant(cpIndex).(string)
+			// 获取字符串池中存储的Java字符串
+			jStr := JString(class.Loader(), goStr)
+			vars.SetRef(slotId, jStr)
 		}
 	}
 }

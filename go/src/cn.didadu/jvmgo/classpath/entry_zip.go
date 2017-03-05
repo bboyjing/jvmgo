@@ -12,7 +12,7 @@ type ZipEntry struct {
 	absPath string
 }
 
-func newZipEntry(path string) *ZipEntry  {
+func newZipEntry(path string) *ZipEntry {
 	absPath, err := filepath.Abs(path)
 	if err != nil {
 		panic(err)

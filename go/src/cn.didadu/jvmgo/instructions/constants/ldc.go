@@ -3,6 +3,7 @@ package constants
 import (
 	"cn.didadu/jvmgo/instructions/base"
 	"cn.didadu/jvmgo/rtdata"
+	"cn.didadu/jvmgo/rtdata/heap"
 )
 
 // ldc指令结构体(单字节操作数)
@@ -15,10 +16,10 @@ func (self *LDC) Execute(frame *rtdata.Frame) {
 func _ldc(frame *rtdata.Frame, index uint) {
 	// 获取操作数栈
 	stack := frame.OperandStack()
-	// 获取运行时常量池
-	cp := frame.Method().Class().ConstantPool()
+	// 获取当前类
+	class := frame.Method().Class()
 	// 通过索引从常量池中获取常量值
-	c := cp.GetConstant(index)
+	c := class.ConstantPool().GetConstant(index)
 
 	// 根据常量值的类型将对应的值入栈
 	switch c.(type) {
@@ -26,7 +27,10 @@ func _ldc(frame *rtdata.Frame, index uint) {
 		stack.PushInt(c.(int32))
 	case float32:
 		stack.PushFloat(c.(float32))
-	// case string:
+	case string:
+		// 从字符串常量池中获取Java字符串
+		internedStr := heap.JString(class.Loader(), c.(string))
+		stack.PushRef(internedStr)
 	// case *heap.ClassRef:
 	// case MethodType, MethodHandle
 	default:

@@ -23,24 +23,28 @@ func _fload(frame *rtdata.Frame, index uint) {
 
 // 操作第0号局部变量，索引隐含在操作码中
 type FLOAD_0 struct{ base.NoOperandsInstruction }
+
 func (self *FLOAD_0) Execute(frame *rtdata.Frame) {
 	_fload(frame, 0)
 }
 
 // 操作第1号局部变量，索引隐含在操作码中
 type FLOAD_1 struct{ base.NoOperandsInstruction }
+
 func (self *FLOAD_1) Execute(frame *rtdata.Frame) {
 	_fload(frame, 1)
 }
 
 // 操作第2号局部变量，索引隐含在操作码中
 type FLOAD_2 struct{ base.NoOperandsInstruction }
+
 func (self *FLOAD_2) Execute(frame *rtdata.Frame) {
 	_fload(frame, 2)
 }
 
 // 操作第3号局部变量，索引隐含在操作码中
 type FLOAD_3 struct{ base.NoOperandsInstruction }
+
 func (self *FLOAD_3) Execute(frame *rtdata.Frame) {
 	_fload(frame, 3)
 }

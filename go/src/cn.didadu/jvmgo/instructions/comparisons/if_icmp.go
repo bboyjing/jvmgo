@@ -33,7 +33,6 @@ func (self *IF_ICMPEQ) Execute(frame *rtdata.Frame) {
 	}
 }
 
-
 type IF_ICMPLT struct{ base.BranchInstruction }
 
 func (self *IF_ICMPLT) Execute(frame *rtdata.Frame) {

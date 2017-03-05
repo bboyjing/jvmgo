@@ -45,11 +45,11 @@ func (self *LOOKUP_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 func (self *LOOKUP_SWITCH) Execute(frame *rtdata.Frame) {
 	// 弹出栈顶int型变量，作为需要匹配case分支的值
 	key := frame.OperandStack().PopInt()
-	for i := int32(0); i < self.npairs*2; i += 2 {
+	for i := int32(0); i < self.npairs * 2; i += 2 {
 		// 循环判断给定值是否命中case分值
 		if self.matchOffsets[i] == key {
 			// 若命中，则跳转到指定偏移量
-			offset := self.matchOffsets[i+1]
+			offset := self.matchOffsets[i + 1]
 			base.Branch(frame, int(offset))
 			return
 		}

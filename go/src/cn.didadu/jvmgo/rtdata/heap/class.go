@@ -38,28 +38,28 @@ func newClass(cf *classfile.ClassFile) *Class {
 
 // 判断访问标志符
 func (self *Class) IsPublic() bool {
-	return 0 != self.accessFlags&ACC_PUBLIC
+	return 0 != self.accessFlags & ACC_PUBLIC
 }
 func (self *Class) IsFinal() bool {
-	return 0 != self.accessFlags&ACC_FINAL
+	return 0 != self.accessFlags & ACC_FINAL
 }
 func (self *Class) IsSuper() bool {
-	return 0 != self.accessFlags&ACC_SUPER
+	return 0 != self.accessFlags & ACC_SUPER
 }
 func (self *Class) IsInterface() bool {
-	return 0 != self.accessFlags&ACC_INTERFACE
+	return 0 != self.accessFlags & ACC_INTERFACE
 }
 func (self *Class) IsAbstract() bool {
-	return 0 != self.accessFlags&ACC_ABSTRACT
+	return 0 != self.accessFlags & ACC_ABSTRACT
 }
 func (self *Class) IsSynthetic() bool {
-	return 0 != self.accessFlags&ACC_SYNTHETIC
+	return 0 != self.accessFlags & ACC_SYNTHETIC
 }
 func (self *Class) IsAnnotation() bool {
-	return 0 != self.accessFlags&ACC_ANNOTATION
+	return 0 != self.accessFlags & ACC_ANNOTATION
 }
 func (self *Class) IsEnum() bool {
-	return 0 != self.accessFlags&ACC_ENUM
+	return 0 != self.accessFlags & ACC_ENUM
 }
 
 // self class是否能被other class访问
@@ -140,4 +140,30 @@ func (self *Class) ArrayClass() *Class {
 	arrayClassName := getArrayClassName(self.name)
 	// 通过数组类名加载该数组类
 	return self.loader.LoadClass(arrayClassName)
+}
+
+func (self *Class) isJlObject() bool {
+	return self.name == "java/lang/Object"
+}
+
+func (self *Class) isJlCloneable() bool {
+	return self.name == "java/lang/Cloneable"
+}
+func (self *Class) isJioSerializable() bool {
+	return self.name == "java/io/Serializable"
+}
+
+// 通过名称和描述符获取成员变量
+func (self *Class) getField(name, descriptor string, isStatic bool) *Field {
+	for c := self; c != nil; c = c.superClass {
+		for _, field := range c.fields {
+			if field.IsStatic() == isStatic &&
+				field.name == name &&
+				field.descriptor == descriptor {
+
+				return field
+			}
+		}
+	}
+	return nil
 }

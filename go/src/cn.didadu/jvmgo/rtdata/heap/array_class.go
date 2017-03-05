@@ -31,3 +31,9 @@ func (self *Class) NewArray(count uint) *Object {
 		return &Object{self, make([]*Object, count)}
 	}
 }
+
+// 获取数组元素类名，并加载类
+func (self *Class) ComponentClass() *Class {
+	componentClassName := getComponentClassName(self.name)
+	return self.loader.LoadClass(componentClassName)
+}

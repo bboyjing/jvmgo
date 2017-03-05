@@ -45,7 +45,7 @@ func (self *BytecodeReader) ReadInt16() int16 {
 
 // 跳过Padding字节
 func (self *BytecodeReader) SkipPadding() {
-	for self.pc%4 != 0 {
+	for self.pc % 4 != 0 {
 		self.ReadUint8()
 	}
 }

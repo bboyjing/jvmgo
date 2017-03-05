@@ -23,22 +23,22 @@ func (self *ClassMember) copyMemberInfo(memberInfo *classfile.MemberInfo) {
 
 // 判断访问标识
 func (self *ClassMember) IsPublic() bool {
-	return 0 != self.accessFlags&ACC_PUBLIC
+	return 0 != self.accessFlags & ACC_PUBLIC
 }
 func (self *ClassMember) IsPrivate() bool {
-	return 0 != self.accessFlags&ACC_PRIVATE
+	return 0 != self.accessFlags & ACC_PRIVATE
 }
 func (self *ClassMember) IsProtected() bool {
-	return 0 != self.accessFlags&ACC_PROTECTED
+	return 0 != self.accessFlags & ACC_PROTECTED
 }
 func (self *ClassMember) IsStatic() bool {
-	return 0 != self.accessFlags&ACC_STATIC
+	return 0 != self.accessFlags & ACC_STATIC
 }
 func (self *ClassMember) IsFinal() bool {
-	return 0 != self.accessFlags&ACC_FINAL
+	return 0 != self.accessFlags & ACC_FINAL
 }
 func (self *ClassMember) IsSynthetic() bool {
-	return 0 != self.accessFlags&ACC_SYNTHETIC
+	return 0 != self.accessFlags & ACC_SYNTHETIC
 }
 
 // Getter方法

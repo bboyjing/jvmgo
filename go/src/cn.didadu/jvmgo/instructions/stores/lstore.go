@@ -23,24 +23,28 @@ func _lstore(frame *rtdata.Frame, index uint) {
 
 // 将操作数存入第0号局部变量表，索引隐含在操作码中
 type LSTORE_0 struct{ base.NoOperandsInstruction }
+
 func (self *LSTORE_0) Execute(frame *rtdata.Frame) {
 	_lstore(frame, 0)
 }
 
 // 将操作数存入第1号局部变量表，索引隐含在操作码中
 type LSTORE_1 struct{ base.NoOperandsInstruction }
+
 func (self *LSTORE_1) Execute(frame *rtdata.Frame) {
 	_lstore(frame, 1)
 }
 
 // 将操作数存入第2号局部变量表，索引隐含在操作码中
 type LSTORE_2 struct{ base.NoOperandsInstruction }
+
 func (self *LSTORE_2) Execute(frame *rtdata.Frame) {
 	_lstore(frame, 2)
 }
 
 // 将操作数存入第3号局部变量表，索引隐含在操作码中
 type LSTORE_3 struct{ base.NoOperandsInstruction }
+
 func (self *LSTORE_3) Execute(frame *rtdata.Frame) {
 	_lstore(frame, 3)
 }

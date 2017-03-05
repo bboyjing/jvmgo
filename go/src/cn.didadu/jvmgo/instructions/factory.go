@@ -53,14 +53,14 @@ var (
 	aload_1 = &loads.ALOAD_1{}
 	aload_2 = &loads.ALOAD_2{}
 	aload_3 = &loads.ALOAD_3{}
-	// iaload      = &IALOAD{}
-	// laload      = &LALOAD{}
-	// faload      = &FALOAD{}
-	// daload      = &DALOAD{}
-	// aaload      = &AALOAD{}
-	// baload      = &BALOAD{}
-	// caload      = &CALOAD{}
-	// saload      = &SALOAD{}
+	iaload = &loads.IALOAD{}
+	laload = &loads.LALOAD{}
+	faload = &loads.FALOAD{}
+	daload = &loads.DALOAD{}
+	aaload = &loads.AALOAD{}
+	baload = &loads.BALOAD{}
+	caload = &loads.CALOAD{}
+	saload = &loads.SALOAD{}
 	istore_0 = &stores.ISTORE_0{}
 	istore_1 = &stores.ISTORE_1{}
 	istore_2 = &stores.ISTORE_2{}
@@ -81,14 +81,14 @@ var (
 	astore_1 = &stores.ASTORE_1{}
 	astore_2 = &stores.ASTORE_2{}
 	astore_3 = &stores.ASTORE_3{}
-	// iastore  = &IASTORE{}
-	// lastore  = &LASTORE{}
-	// fastore  = &FASTORE{}
-	// dastore  = &DASTORE{}
-	// aastore  = &AASTORE{}
-	// bastore  = &BASTORE{}
-	// castore  = &CASTORE{}
-	// sastore  = &SASTORE{}
+	iastore = &stores.IASTORE{}
+	lastore = &stores.LASTORE{}
+	fastore = &stores.FASTORE{}
+	dastore = &stores.DASTORE{}
+	aastore = &stores.AASTORE{}
+	bastore = &stores.BASTORE{}
+	castore = &stores.CASTORE{}
+	sastore = &stores.SASTORE{}
 	pop = &stack.POP{}
 	pop2 = &stack.POP2{}
 	dup = &stack.DUP{}
@@ -160,7 +160,7 @@ var (
 	dreturn = &control.DRETURN{}
 	areturn = &control.ARETURN{}
 	_return = &control.RETURN{}
-	// arraylength   = &ARRAY_LENGTH{}
+	arraylength = &references.ARRAY_LENGTH{}
 	// athrow        = &ATHROW{}
 	// monitorenter  = &MONITOR_ENTER{}
 	// monitorexit   = &MONITOR_EXIT{}
@@ -261,22 +261,22 @@ func NewInstruction(opcode byte) base.Instruction {
 		return aload_2
 	case 0x2d:
 		return aload_3
-	// case 0x2e:
-	// 	return iaload
-	// case 0x2f:
-	// 	return laload
-	// case 0x30:
-	// 	return faload
-	// case 0x31:
-	// 	return daload
-	// case 0x32:
-	// 	return aaload
-	// case 0x33:
-	// 	return baload
-	// case 0x34:
-	// 	return caload
-	// case 0x35:
-	// 	return saload
+	case 0x2e:
+		return iaload
+	case 0x2f:
+		return laload
+	case 0x30:
+		return faload
+	case 0x31:
+		return daload
+	case 0x32:
+		return aaload
+	case 0x33:
+		return baload
+	case 0x34:
+		return caload
+	case 0x35:
+		return saload
 	case 0x36:
 		return &stores.ISTORE{}
 	case 0x37:
@@ -327,22 +327,22 @@ func NewInstruction(opcode byte) base.Instruction {
 		return astore_2
 	case 0x4e:
 		return astore_3
-	// case 0x4f:
-	// 	return iastore
-	// case 0x50:
-	// 	return lastore
-	// case 0x51:
-	// 	return fastore
-	// case 0x52:
-	// 	return dastore
-	// case 0x53:
-	// 	return aastore
-	// case 0x54:
-	// 	return bastore
-	// case 0x55:
-	// 	return castore
-	// case 0x56:
-	// 	return sastore
+	case 0x4f:
+		return iastore
+	case 0x50:
+		return lastore
+	case 0x51:
+		return fastore
+	case 0x52:
+		return dastore
+	case 0x53:
+		return aastore
+	case 0x54:
+		return bastore
+	case 0x55:
+		return castore
+	case 0x56:
+		return sastore
 	case 0x57:
 		return pop
 	case 0x58:
@@ -545,12 +545,12 @@ func NewInstruction(opcode byte) base.Instruction {
 	// 	return &INVOKE_DYNAMIC{}
 	case 0xbb:
 		return &references.NEW{}
-	// case 0xbc:
-	// 	return &NEW_ARRAY{}
-	// case 0xbd:
-	// 	return &ANEW_ARRAY{}
-	// case 0xbe:
-	// 	return arraylength
+	case 0xbc:
+		return &references.NEW_ARRAY{}
+	case 0xbd:
+		return &references.ANEW_ARRAY{}
+	case 0xbe:
+		return arraylength
 	// case 0xbf:
 	// 	return athrow
 	case 0xc0:

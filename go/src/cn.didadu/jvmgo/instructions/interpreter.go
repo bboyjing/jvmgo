@@ -8,13 +8,18 @@ import (
 )
 
 // 传入入口方法，初始化线程
-func Interpret(method *heap.Method, logInst bool) {
+func Interpret(method *heap.Method, logInst bool, args []string) {
 	// 创建一个Thread实例
 	thread := rtdata.NewThread()
 	// 创建栈帧
 	frame := thread.NewFrame(method)
 	// 栈帧推入虚拟栈
 	thread.PushFrame(frame)
+
+	// 将参数转成Object引用
+	jArgs := createArgsArray(method.Class().Loader(), args)
+	// 将引用存储到局部变量表第0位
+	frame.LocalVars().SetRef(0, jArgs)
 
 	defer catchErr(thread)
 	loop(thread, logInst)
@@ -82,4 +87,18 @@ func logInstruction(frame *rtdata.Frame, inst base.Instruction) {
 	methodName := method.Name()
 	pc := frame.Thread().PC()
 	fmt.Printf("%v.%v() #%2d %T %v\n", className, methodName, pc, inst, inst)
+}
+
+// 生成java字符串数组
+func createArgsArray(loader *heap.ClassLoader, args []string) *heap.Object {
+	// 加载java.lang.String类
+	stringClass := loader.LoadClass("java/lang/String")
+	// 创建数组
+	argsArr := stringClass.ArrayClass().NewArray(uint(len(args)))
+	jArgs := argsArr.Refs()
+	for i, arg := range args {
+		// 获取Java String
+		jArgs[i] = heap.JString(loader, arg)
+	}
+	return argsArr
 }

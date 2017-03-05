@@ -21,7 +21,7 @@ func newDirEntry(path string) *DirEntry {
 		Go使用panic和recover来处理所谓的运行时异常
 	 */
 	absDir, err := filepath.Abs(path)
-	if(err != nil) {
+	if (err != nil) {
 		panic(err)
 	}
 	return &DirEntry{absDir}

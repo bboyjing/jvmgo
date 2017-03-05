@@ -83,7 +83,7 @@ func startJVM(cmd *cmd.Cmd) {
 	// 获取主类的main()方法
 	mainMethod := mainClass.GetMainMethod()
 	if mainMethod != nil {
-		instructions.Interpret(mainMethod, cmd.VerboseInstFlag)
+		instructions.Interpret(mainMethod, cmd.VerboseInstFlag, cmd.Args)
 	} else {
 		fmt.Printf("Main method not found in class %s\n", cmd.Class)
 	}

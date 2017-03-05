@@ -19,7 +19,7 @@ func (self *ConstantStringInfo) readInfo(reader *ClassReader) {
 }
 
 // 读取string字面常量
-func (self *ConstantStringInfo) String() string{
+func (self *ConstantStringInfo) String() string {
 	//需要通过stringIndex到常量池中读取
 	return self.cp.getUtf8(self.stringIndex)
 }

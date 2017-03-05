@@ -33,7 +33,7 @@ func (self CompositeEntry) String() string {
 	//make函数构造一个固定长度的数组并返回一个slice指向这个数组
 	strs := make([]string, len(self))
 	//调用Entry实例的String方法，并添加到slice中
-	for i,entry := range self {
+	for i, entry := range self {
 		strs[i] = entry.String()
 	}
 	// 将slice中的元素加上分隔符拼接起来返回

@@ -6,11 +6,11 @@ type Method struct {
 	// 字段和方法公用结构体
 	ClassMember
 	// 操作数栈最大深度
-	maxStack  uint
+	maxStack     uint
 	// 局部变量表大小
-	maxLocals uint
+	maxLocals    uint
 	// 字节码
-	code      []byte
+	code         []byte
 	// 方法的参数所占的Slot数量
 	argSlotCount uint
 }
@@ -71,9 +71,9 @@ func (self *Method) ArgSlotCount() uint {
 }
 
 func (self *Method) IsAbstract() bool {
-	return 0 != self.accessFlags&ACC_ABSTRACT
+	return 0 != self.accessFlags & ACC_ABSTRACT
 }
 
 func (self *Method) IsNative() bool {
-	return 0 != self.accessFlags&ACC_NATIVE
+	return 0 != self.accessFlags & ACC_NATIVE
 }

@@ -11,14 +11,14 @@ import (
 	java [-options] class [args...]
 */
 type Cmd struct {
-	HelpFlag    bool
+	HelpFlag         bool
 	VersionFlag      bool
 	VerboseClassFlag bool
-	VerboseInstFlag bool
-	CpOption    string
-	Class       string
-	Args        []string
-	XjreOption  string
+	VerboseInstFlag  bool
+	CpOption         string
+	Class            string
+	Args             []string
+	XjreOption       string
 }
 
 /*

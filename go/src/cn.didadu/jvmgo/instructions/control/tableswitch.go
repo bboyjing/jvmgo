@@ -57,7 +57,7 @@ func (self *TABLE_SWITCH) Execute(frame *rtdata.Frame) {
 	var offset int
 	if index >= self.low && index <= self.high {
 		// 若在case范围内，则通过index获取索引表中的值
-		offset = int(self.jumpOffsets[index-self.low])
+		offset = int(self.jumpOffsets[index - self.low])
 	} else {
 		// 若不再case范围内，给出默认值
 		offset = int(self.defaultOffset)

@@ -40,12 +40,12 @@ func (self Slots) GetFloat(index uint) float32 {
 // long、double的Getter和Setter方法
 func (self Slots) SetLong(index uint, val int64) {
 	self[index].num = int32(val)
-	self[index+1].num = int32(val >> 32)
+	self[index + 1].num = int32(val >> 32)
 }
 func (self Slots) GetLong(index uint) int64 {
 	low := uint32(self[index].num)
-	high := uint32(self[index+1].num)
-	return int64(high)<<32 | int64(low)
+	high := uint32(self[index + 1].num)
+	return int64(high) << 32 | int64(low)
 }
 func (self Slots) SetDouble(index uint, val float64) {
 	bits := math.Float64bits(val)

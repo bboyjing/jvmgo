@@ -1,4 +1,3 @@
-
 package comparisons
 
 import (

@@ -11,4 +11,8 @@ public class ArrayDemo {
         a2[0] = "abc";                // aastore
         String s = a2[0];             // aaload
     }
+
+    public void test() {
+        int [][][] x = new int [3][4][5];
+    }
 }

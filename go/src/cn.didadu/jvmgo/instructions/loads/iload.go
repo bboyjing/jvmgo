@@ -23,24 +23,28 @@ func _iload(frame *rtdata.Frame, index uint) {
 
 // 操作第0号局部变量，索引隐含在操作码中
 type ILOAD_0 struct{ base.NoOperandsInstruction }
+
 func (self *ILOAD_0) Execute(frame *rtdata.Frame) {
 	_iload(frame, 0)
 }
 
 // 操作第1号局部变量，索引隐含在操作码中
 type ILOAD_1 struct{ base.NoOperandsInstruction }
+
 func (self *ILOAD_1) Execute(frame *rtdata.Frame) {
 	_iload(frame, 1)
 }
 
 // 操作第2号局部变量，索引隐含在操作码中
 type ILOAD_2 struct{ base.NoOperandsInstruction }
+
 func (self *ILOAD_2) Execute(frame *rtdata.Frame) {
 	_iload(frame, 2)
 }
 
 // 操作第3号局部变量，索引隐含在操作码中
 type ILOAD_3 struct{ base.NoOperandsInstruction }
+
 func (self *ILOAD_3) Execute(frame *rtdata.Frame) {
 	_iload(frame, 3)
 }

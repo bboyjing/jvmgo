@@ -16,6 +16,7 @@ type Instruction interface {
  */
 type NoOperandsInstruction struct {
 }
+
 func (self *NoOperandsInstruction) FetchOperands(reader *BytecodeReader) {
 }
 
@@ -24,6 +25,7 @@ type BranchInstruction struct {
 	// 存储跳转偏移量
 	Offset int
 }
+
 func (self *BranchInstruction) FetchOperands(reader *BytecodeReader) {
 	// 从字节码中读取uint16整数，转成int后赋给Offset
 	self.Offset = int(reader.ReadInt16())
@@ -34,6 +36,7 @@ type Index8Instruction struct {
 	//局部变量表索引
 	Index uint
 }
+
 func (self *Index8Instruction) FetchOperands(reader *BytecodeReader) {
 	// 从字节码中读取一个uint8整数，转成uint后赋给Index
 	self.Index = uint(reader.ReadUint8())
@@ -44,6 +47,7 @@ type Index16Instruction struct {
 	// 常量池索引
 	Index uint
 }
+
 func (self *Index16Instruction) FetchOperands(reader *BytecodeReader) {
 	// 读取一个uint16整数，转成uint后赋给Index
 	self.Index = uint(reader.ReadUint16())

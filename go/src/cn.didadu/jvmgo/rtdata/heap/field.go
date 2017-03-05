@@ -26,13 +26,13 @@ func newFields(class *Class, cfFields []*classfile.MemberInfo) []*Field {
 
 // 判断访问标识
 func (self *Field) IsVolatile() bool {
-	return 0 != self.accessFlags&ACC_VOLATILE
+	return 0 != self.accessFlags & ACC_VOLATILE
 }
 func (self *Field) IsTransient() bool {
-	return 0 != self.accessFlags&ACC_TRANSIENT
+	return 0 != self.accessFlags & ACC_TRANSIENT
 }
 func (self *Field) IsEnum() bool {
-	return 0 != self.accessFlags&ACC_ENUM
+	return 0 != self.accessFlags & ACC_ENUM
 }
 
 // slotId Getter

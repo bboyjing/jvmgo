@@ -14,7 +14,7 @@ import (
 
 func newWildcardEntry(path string) CompositeEntry {
 	//去掉路径末尾的*
-	baseDir := path[:len(path)-1]
+	baseDir := path[:len(path) - 1]
 	compositeEntry := []Entry{};
 	/*
 		在walkFn中，根据后缀名选出JAR文件，并返回SkipDir跳过子目录

@@ -24,24 +24,28 @@ func _aload(frame *rtdata.Frame, index uint) {
 
 // 操作第0号局部变量，索引隐含在操作码中
 type ALOAD_0 struct{ base.NoOperandsInstruction }
+
 func (self *ALOAD_0) Execute(frame *rtdata.Frame) {
 	_aload(frame, 0)
 }
 
 // 操作第1号局部变量，索引隐含在操作码中
 type ALOAD_1 struct{ base.NoOperandsInstruction }
+
 func (self *ALOAD_1) Execute(frame *rtdata.Frame) {
 	_aload(frame, 1)
 }
 
 // 操作第2号局部变量，索引隐含在操作码中
 type ALOAD_2 struct{ base.NoOperandsInstruction }
+
 func (self *ALOAD_2) Execute(frame *rtdata.Frame) {
 	_aload(frame, 2)
 }
 
 // 操作第3号局部变量，索引隐含在操作码中
 type ALOAD_3 struct{ base.NoOperandsInstruction }
+
 func (self *ALOAD_3) Execute(frame *rtdata.Frame) {
 	_aload(frame, 3)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 // anewarray指令结构体
-type ANEW_ARRAY struct{
+type ANEW_ARRAY struct {
 	base.Index16Instruction
 }
 
