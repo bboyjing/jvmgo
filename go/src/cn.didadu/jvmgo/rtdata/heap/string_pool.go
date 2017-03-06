@@ -15,7 +15,7 @@ func JString(loader *ClassLoader, goStr string) *Object {
 	// 将utf8转成utf16
 	chars := stringToUtf16(goStr)
 	// 字符串实例引用
-	jChars := &Object{loader.LoadClass("[C"), chars}
+	jChars := &Object{loader.LoadClass("[C"), chars, nil}
 
 	// 加载String类，并且创建实例
 	jStr := loader.LoadClass("java/lang/String").NewObject()
@@ -44,4 +44,14 @@ func GoString(jStr *Object) string {
 func utf16ToString(s []uint16) string {
 	runes := utf16.Decode(s) // func Decode(s []uint16) []rune
 	return string(runes)
+}
+
+func InternString(jStr *Object) *Object {
+	goStr := GoString(jStr)
+	if internedStr, ok := internedStrings[goStr]; ok {
+		return internedStr
+	}
+
+	internedStrings[goStr] = jStr
+	return jStr
 }

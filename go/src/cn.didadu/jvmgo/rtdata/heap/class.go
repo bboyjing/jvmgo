@@ -21,6 +21,8 @@ type Class struct {
 	staticVars        Slots
 	// 表示类的<clinit>方法是否已经开始执行
 	initStarted       bool
+	// 类对象(java.lang.Class实例)
+	jClass            *Object
 }
 
 // 将ClassFile结构体转换成Class结构体
@@ -162,6 +164,43 @@ func (self *Class) getField(name, descriptor string, isStatic bool) *Field {
 				field.descriptor == descriptor {
 
 				return field
+			}
+		}
+	}
+	return nil
+}
+
+func (self *Class) JClass() *Object {
+	return self.jClass
+}
+
+func (self *Class) JavaName() string {
+	return strings.Replace(self.name, "/", ".", -1)
+}
+
+// 判断是否是基本类型
+func (self *Class) IsPrimitive() bool {
+	_, ok := primitiveTypes[self.name]
+	return ok
+}
+
+func (self *Class) GetRefVar(fieldName, fieldDescriptor string) *Object {
+	field := self.getField(fieldName, fieldDescriptor, true)
+	return self.staticVars.GetRef(field.slotId)
+}
+
+func (self *Class) GetInstanceMethod(name, descriptor string) *Method {
+	return self.getMethod(name, descriptor, false)
+}
+
+func (self *Class) getMethod(name, descriptor string, isStatic bool) *Method {
+	for c := self; c != nil; c = c.superClass {
+		for _, method := range c.methods {
+			if method.IsStatic() == isStatic &&
+				method.name == name &&
+				method.descriptor == descriptor {
+
+				return method
 			}
 		}
 	}

@@ -13,6 +13,7 @@ import (
 	"cn.didadu/jvmgo/instructions/control"
 	"cn.didadu/jvmgo/instructions/extended"
 	"cn.didadu/jvmgo/instructions/references"
+	"cn.didadu/jvmgo/instructions/reserved"
 )
 
 // 没有操作数的指令，没有必要每次都创建不同实例，直接返回单利变量即可
@@ -164,7 +165,7 @@ var (
 	// athrow        = &ATHROW{}
 	// monitorenter  = &MONITOR_ENTER{}
 	// monitorexit   = &MONITOR_EXIT{}
-	// invoke_native = &INVOKE_NATIVE{}
+	invoke_native = &reserved.INVOKE_NATIVE{}
 )
 
 func NewInstruction(opcode byte) base.Instruction {
@@ -563,8 +564,8 @@ func NewInstruction(opcode byte) base.Instruction {
 	// 	return monitorexit
 	case 0xc4:
 		return &extended.WIDE{}
-	// case 0xc5:
-	// 	return &MULTI_ANEW_ARRAY{}
+	case 0xc5:
+		return &references.MULTI_ANEW_ARRAY{}
 	case 0xc6:
 		return &extended.IFNULL{}
 	case 0xc7:
@@ -574,7 +575,8 @@ func NewInstruction(opcode byte) base.Instruction {
 	// case 0xc9:
 	// 	return &JSR_W{}
 	// case 0xca: breakpoint
-	// case 0xfe: impdep1
+	case 0xfe:
+		return invoke_native
 	// case 0xff: impdep2
 	default:
 		panic(fmt.Errorf("Unsupported opcode: 0x%x!", opcode))

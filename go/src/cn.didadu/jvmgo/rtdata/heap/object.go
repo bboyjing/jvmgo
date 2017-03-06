@@ -6,6 +6,7 @@ type Object struct {
 	class *Class
 	// 实例变量，可以容纳任何类型的值
 	data  interface{}
+	extra interface{}
 }
 
 func newObject(class *Class) *Object {
@@ -39,4 +40,11 @@ func (self *Object) SetRefVar(name, descriptor string, ref *Object) {
 	field := self.class.getField(name, descriptor, false)
 	slots := self.data.(Slots)
 	slots.SetRef(field.slotId, ref)
+}
+
+func (self *Object) Extra() interface{} {
+	return self.extra
+}
+func (self *Object) SetExtra(extra interface{}) {
+	self.extra = extra
 }

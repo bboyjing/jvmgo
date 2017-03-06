@@ -31,7 +31,11 @@ func _ldc(frame *rtdata.Frame, index uint) {
 		// 从字符串常量池中获取Java字符串
 		internedStr := heap.JString(class.Loader(), c.(string))
 		stack.PushRef(internedStr)
-	// case *heap.ClassRef:
+	case *heap.ClassRef:
+		// 支持类对象
+		classRef := c.(*heap.ClassRef)
+		classObj := classRef.ResolvedClass().JClass()
+		stack.PushRef(classObj)
 	// case MethodType, MethodHandle
 	default:
 		panic("todo: ldc!")

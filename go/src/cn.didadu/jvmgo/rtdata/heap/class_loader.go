@@ -17,12 +17,50 @@ type ClassLoader struct {
 
 // 创建ClassLoader实例
 func NewClassLoader(cp *classpath.Classpath, verboseFlag bool) *ClassLoader {
-	return &ClassLoader{
+	loader := &ClassLoader{
 		cp:       cp,
 		verboseFlag: verboseFlag,
 		classMap: make(map[string]*Class),
 	}
+
+	loader.loadBasicClasses()
+	loader.loadPrimitiveClasses()
+	return loader
 }
+
+// 加载基本类型的类
+func (self *ClassLoader) loadPrimitiveClasses() {
+	for primitiveType, _ := range primitiveTypes {
+		self.loadPrimitiveClass(primitiveType)
+	}
+}
+
+func (self *ClassLoader) loadPrimitiveClass(className string) {
+	class := &Class{
+		accessFlags: ACC_PUBLIC, // todo
+		name:        className,
+		loader:      self,
+		initStarted: true,
+	}
+	class.jClass = self.classMap["java/lang/Class"].NewObject()
+	class.jClass.extra = class
+	self.classMap[className] = class
+}
+
+// 加载java.lang.Class类
+func (self *ClassLoader) loadBasicClasses() {
+	// 加载java.lang.Class类，会触发java.lang.Object等类和接口的加载
+	jlClassClass := self.LoadClass("java/lang/Class")
+	// 遍历已经加载的每一个类
+	for _, class := range self.classMap {
+		// 给每个类设置关联类对象
+		if class.jClass == nil {
+			class.jClass = jlClassClass.NewObject()
+			class.jClass.extra = class
+		}
+	}
+}
+
 
 // 把类数据加载到方法区
 func (self *ClassLoader) LoadClass(name string) *Class {
@@ -32,13 +70,21 @@ func (self *ClassLoader) LoadClass(name string) *Class {
 		return class
 	}
 
+	var class *Class
 	// 若类名的第一个字符是'['，表示该类是数组类
 	if name[0] == '[' {
-		return self.loadArrayClass(name)
+		class = self.loadArrayClass(name)
+	} else {
+		class = self.loadNonArrayClass(name)
 	}
 
-	// 加载类
-	return self.loadNonArrayClass(name)
+	// 如果已加载java.lang.Class类，则给类关联类对象
+	if jlClassClass, ok := self.classMap["java/lang/Class"]; ok {
+		class.jClass = jlClassClass.NewObject()
+		class.jClass.extra = class
+	}
+
+	return class
 }
 
 // 加载数组类
