@@ -64,3 +64,12 @@ func (self *Thread) TopFrame() *Frame {
 func (self *Thread) IsStackEmpty() bool {
 	return self.stack.isEmpty()
 }
+
+func (self *Thread) ClearStack() {
+	self.stack.clear()
+}
+
+// 获取完整的Java虚拟机栈
+func (self *Thread) GetFrames() []*Frame {
+	return self.stack.getFrames()
+}

@@ -6,13 +6,17 @@ type Method struct {
 	// 字段和方法公用结构体
 	ClassMember
 	// 操作数栈最大深度
-	maxStack     uint
+	maxStack       uint
 	// 局部变量表大小
-	maxLocals    uint
+	maxLocals      uint
 	// 字节码
-	code         []byte
+	code           []byte
 	// 方法的参数所占的Slot数量
-	argSlotCount uint
+	argSlotCount   uint
+	// 异常处理表
+	exceptionTable ExceptionTable
+	// 行号表信息
+	lineNumberTable *classfile.LineNumberTableAttribute
 }
 
 // 初始化方法信息
@@ -45,7 +49,23 @@ func (self *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 		self.maxStack = codeAttr.MaxStack()
 		self.maxLocals = codeAttr.MaxLocals()
 		self.code = codeAttr.Code()
+		self.exceptionTable = newExceptionTable(codeAttr.ExceptionTable(),
+			self.class.constantPool)
+		self.lineNumberTable = codeAttr.LineNumberTableAttribute()
 	}
+}
+
+// 和源文件一样，并不是每个方法都有行号表。
+func (self *Method) GetLineNumber(pc int) int {
+	// 本地方法没有字节码，自然就没有行号表，返回-2
+	if self.IsNative() {
+		return -2
+	}
+	// 没有行号表，返回-1
+	if self.lineNumberTable == nil {
+		return -1
+	}
+	return self.lineNumberTable.GetLineNumber(pc)
 }
 
 // Getter方法
@@ -106,4 +126,15 @@ func (self *Method) injectCodeAttribute(returnType string) {
 	default:
 		self.code = []byte{0xfe, 0xac} // ireturn
 	}
+}
+
+// 查找异常处理表
+func (self *Method) FindExceptionHandler(exClass *Class, pc int) int {
+	handler := self.exceptionTable.findExceptionHandler(exClass, pc)
+	// 如果找到对应的异常处理项，返回handlerPc字段
+	if handler != nil {
+		return handler.handlerPc
+	}
+	// 否则返回-1
+	return -1
 }

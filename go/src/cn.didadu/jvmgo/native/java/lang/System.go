@@ -33,8 +33,8 @@ func arraycopy(frame *rtdata.Frame) {
 
 	// 验证参数是否合法
 	if srcPos < 0 || destPos < 0 || length < 0 ||
-		srcPos+length > src.ArrayLength() ||
-		destPos+length > dest.ArrayLength() {
+		srcPos + length > src.ArrayLength() ||
+		destPos + length > dest.ArrayLength() {
 		panic("java.lang.IndexOutOfBoundsException")
 	}
 

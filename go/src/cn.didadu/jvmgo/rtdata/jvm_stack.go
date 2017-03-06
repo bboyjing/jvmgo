@@ -59,3 +59,19 @@ func (self *Stack) pop() *Frame {
 func (self *Stack) isEmpty() bool {
 	return self._top == nil
 }
+
+// 清空JVM虚拟机栈
+func (self *Stack) clear() {
+	for !self.isEmpty() {
+		self.pop()
+	}
+}
+
+// 构造栈帧完整的栈帧
+func (self *Stack) getFrames() []*Frame {
+	frames := make([]*Frame, 0, self.size)
+	for frame := self._top; frame != nil; frame = frame.lower {
+		frames = append(frames, frame)
+	}
+	return frames
+}

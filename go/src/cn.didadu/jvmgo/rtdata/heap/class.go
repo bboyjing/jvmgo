@@ -23,6 +23,8 @@ type Class struct {
 	initStarted       bool
 	// 类对象(java.lang.Class实例)
 	jClass            *Object
+	// 类所在的文件名
+	sourceFile        string
 }
 
 // 将ClassFile结构体转换成Class结构体
@@ -35,7 +37,20 @@ func newClass(cf *classfile.ClassFile) *Class {
 	class.constantPool = newConstantPool(class, cf.ConstantPool())
 	class.fields = newFields(class, cf.Fields())
 	class.methods = newMethods(class, cf.Methods())
+	class.sourceFile = getSourceFile(cf)
 	return class
+}
+
+// 要注意的是，并不是每个class文件都有源文件信息
+func getSourceFile(cf *classfile.ClassFile) string {
+	if sfAttr := cf.SourceFileAttribute(); sfAttr != nil {
+		return sfAttr.FileName()
+	}
+	return "Unknown" // todo
+}
+
+func (self *Class) SourceFile() string {
+	return self.sourceFile
 }
 
 // 判断访问标志符
